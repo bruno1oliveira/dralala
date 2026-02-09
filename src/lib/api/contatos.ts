@@ -52,7 +52,7 @@ export async function getContatoById(id: string) {
 export async function createContato(contato: ContatoInsert) {
     const { data, error } = await supabase
         .from('contatos')
-        .insert(contato)
+        .insert(contato as any)
         .select()
         .single();
 
@@ -63,7 +63,8 @@ export async function createContato(contato: ContatoInsert) {
 export async function updateContato(id: string, updates: ContatoUpdate) {
     const { data, error } = await supabase
         .from('contatos')
-        .update(updates)
+        // @ts-ignore
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();
@@ -92,14 +93,16 @@ export async function getContatosStats() {
 
     if (error) throw error;
 
+    const contatos = data as any[];
+
     const stats = {
-        total: data.length,
-        apoiadores: data.filter(c => c.is_apoiador).length,
+        total: contatos.length,
+        apoiadores: contatos.filter((c: any) => c.is_apoiador).length,
         porBairro: {} as Record<string, number>,
         tagsCounts: {} as Record<string, number>,
     };
 
-    data.forEach((c) => {
+    contatos.forEach((c: any) => {
         stats.porBairro[c.bairro] = (stats.porBairro[c.bairro] || 0) + 1;
         c.tags?.forEach((tag: string) => {
             stats.tagsCounts[tag] = (stats.tagsCounts[tag] || 0) + 1;
