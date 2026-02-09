@@ -54,10 +54,12 @@ export async function getNoticiaBySlug(slug: string) {
     if (error) throw error;
 
     // Incrementar visualizações
+    const noticia = data as any;
     await supabase
         .from('noticias')
-        .update({ visualizacoes: (data.visualizacoes || 0) + 1 })
-        .eq('id', data.id);
+        // @ts-ignore
+        .update({ visualizacoes: (noticia.visualizacoes || 0) + 1 } as any)
+        .eq('id', noticia.id);
 
     return data as Noticia;
 }
@@ -76,7 +78,7 @@ export async function getNoticiaById(id: string) {
 export async function createNoticia(noticia: NoticiaInsert) {
     const { data, error } = await supabase
         .from('noticias')
-        .insert(noticia)
+        .insert(noticia as any)
         .select()
         .single();
 
@@ -92,7 +94,8 @@ export async function updateNoticia(id: string, updates: NoticiaUpdate) {
 
     const { data, error } = await supabase
         .from('noticias')
-        .update(updates)
+        // @ts-ignore
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();

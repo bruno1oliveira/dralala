@@ -41,7 +41,7 @@ export async function getMensagemById(id: string) {
 export async function enviarMensagem(mensagem: MensagemContatoInsert) {
     const { data, error } = await supabase
         .from('mensagens_contato')
-        .insert(mensagem)
+        .insert(mensagem as any)
         .select()
         .single();
 
@@ -52,7 +52,8 @@ export async function enviarMensagem(mensagem: MensagemContatoInsert) {
 export async function marcarComoLida(id: string) {
     const { data, error } = await supabase
         .from('mensagens_contato')
-        .update({ lida: true })
+        // @ts-ignore
+        .update({ lida: true } as any)
         .eq('id', id)
         .select()
         .single();
@@ -64,7 +65,8 @@ export async function marcarComoLida(id: string) {
 export async function marcarComoRespondida(id: string) {
     const { data, error } = await supabase
         .from('mensagens_contato')
-        .update({ respondida: true, lida: true })
+        // @ts-ignore
+        .update({ respondida: true, lida: true } as any)
         .eq('id', id)
         .select()
         .single();

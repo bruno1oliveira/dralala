@@ -54,7 +54,7 @@ export async function getDemandaById(id: string) {
 export async function createDemanda(demanda: DemandaInsert) {
     const { data, error } = await supabase
         .from('demandas')
-        .insert(demanda)
+        .insert(demanda as any)
         .select()
         .single();
 
@@ -65,7 +65,8 @@ export async function createDemanda(demanda: DemandaInsert) {
 export async function updateDemanda(id: string, updates: DemandaUpdate) {
     const { data, error } = await supabase
         .from('demandas')
-        .update(updates)
+        // @ts-ignore
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();
@@ -94,14 +95,16 @@ export async function getDemandasStats() {
 
     if (error) throw error;
 
+    const demandas = data as any[];
+
     const stats = {
-        total: data.length,
+        total: demandas.length,
         porStatus: {} as Record<string, number>,
         porTipo: {} as Record<string, number>,
         porBairro: {} as Record<string, number>,
     };
 
-    data.forEach((d) => {
+    demandas.forEach((d) => {
         stats.porStatus[d.status] = (stats.porStatus[d.status] || 0) + 1;
         stats.porTipo[d.tipo] = (stats.porTipo[d.tipo] || 0) + 1;
         stats.porBairro[d.bairro] = (stats.porBairro[d.bairro] || 0) + 1;
