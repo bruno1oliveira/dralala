@@ -3,6 +3,7 @@ import { getContatosStats } from "@/lib/api/contatos";
 import DashboardClient from "@/components/admin/DashboardClient";
 
 // A página é um Server Component por padrão
+export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
     const [demandasStats, recentDemandas, contatosStats] = await Promise.all([
         getDemandasStats(),
