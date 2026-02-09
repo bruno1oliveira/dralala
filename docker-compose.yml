@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    container_name: gabinete-dra-lala
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    # Se precisar de variáveis de ambiente, descomente e adicione aqui ou use um arquivo .env
+    # env_file:
+    #   - .env.local
